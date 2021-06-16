@@ -40,7 +40,7 @@ public class JPAUnitTestCase {
 	// Entities are auto-discovered, so just add them anywhere on class-path
 	// Add your tests, using standard JUnit.
 	@Test
-	public void hhh123Test() throws Exception {
+	public void brokenOrphanRemovalWhenElementCollectionIsUsed() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 
@@ -53,7 +53,7 @@ public class JPAUnitTestCase {
 
 		entityManager.persist(raceDriver);
 
-		entityManager.getTransaction().commit();
+		entityManager.getTransaction().commit(); // will fail when orphanRemoval = true
 		entityManager.close();
 	}
 
@@ -97,7 +97,7 @@ public class JPAUnitTestCase {
 
 	@Embeddable
 	public static class Car {
-		//        @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+		// when orphanRemoval is set to false the above testcase will not fail
 		@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 		private Engine engine;
 
